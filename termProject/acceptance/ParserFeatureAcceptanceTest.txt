@@ -1,0 +1,94 @@
+*** Settings ***
+Library           ParserKeywords
+
+| *Variable*  | *Value*                                                                                                   |
+| ${expected} | usage: java VolumeCalculator length width height\nVolumeCalcultor.java: error: unrecognized arguments: 43 |
+| ${expected1} | usage: java VolumeCalculator length width height\nCalcuate the volume of a box.\npositional arguments:\n   length the length of the box (float)\n   width the width of the box(float)\n   height the height of the box(float) |
+| ${expected2} | usage: java VolumeCalculator length width height\nVolumeCalcultor.java: error: argument width: invalid float value: something |
+
+| *Test Case*                            | *Action*                              | *Argument*         | *Argument*   | *Argument* | *Argument* |
+| Test Volume Calculator Normal Function | Start Volume Cacluator With Arguments | 7                  | 5            | 2          |            |
+|                                        | ${length}=                            | Get Length         |              |            |            |
+|                                        | Should Be Equal                       | 7                  | ${length}    |            |            |
+|                                        | ${width}=                             | Get Width          |              |            |            |
+|                                        | Should Be Equal                       | 5                  | ${width}     |            |            |
+|                                        | ${height}=                            | Get Height         |              |            |            |
+|                                        | Should Be Equal                       | 2                  | ${height}    |            |            |
+|                                        | ${output}=                            | Get Program Output |              |            |            |
+|                                        | Should Be Equal                       | ${output}          | 70.0         |            |            |
+| Test Unrecognized Argument             | Start Volume Cacluator With Arguments | 7                  | 5            | 2          | 43         |
+|                                        | ${output}=                            | Get Program Output |              |            |            |
+|                                        | Should Be Equal                       | ${output}          | ${expected}  |            |            |
+| Test Absurd Program Normal Function    | Start Absurd Program With Arguments   | dog                | 2            | true       | 3.5        |
+|                                        | ${pet}=                               | Get Pet            |              |            |            |
+|                                        | Should Be Equal                       | dog                | ${pet}       |            |            |
+|                                        | ${number}=                            | Get Number         |              |            |            |
+|                                        | Should Be Equal                       | 2                  | ${number}    |            |            |
+|                                        | ${rainy}=                             | Get Rainy          |              |            |            |
+|                                        | Should Be Equal                       | true               | ${rainy}     |            |            |
+|                                        | ${bathrooms}=                         | Get Bathrooms      |              |            |            |
+|                                        | Should Be Equal                       | 3.5                | ${bathrooms} |            |            |
+| Test Usage Message                     | Start Program With Arguments          | -h                 |              |            |            |
+|                                        | ${output}=                            | Get Program Output |              |            |            |
+|                                        | Should Be Equal                       | ${expected1}       | ${output}    |            |            |
+| Test Incorrect Datatype Message        | Start Program With Arguments          | 7                  | something    | 2          |            |
+|                                        | ${output}=                            | Get Program Output |              |            |            |
+|                                        | Should Be Equal                       | ${output}          | ${expected2} |            |            |
+| Test Named Argument Defaults | Start Volume Cacluator With Arguments | 7                  | 3            | 2          |            |            |            |            |
+|                              | ${length}=                            | Get Length         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 7                  | ${length}    |            |            |            |            |            |
+|                              | ${width}=                             | Get Width          |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 3                  | ${width}     |            |            |            |            |            |
+|                              | ${height}=                            | Get Height         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 2                  | ${height}    |            |            |            |            |            |
+|                              | ${type}=                              | Get Type           |              |            |            |            |            |            |
+|                              | Should Be Equal                       | box                | ${type}      |            |            |            |            |            |
+|                              | ${digits}=                            | Get Digits         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 4                  | ${digits}    |            |            |            |            |            |
+| Test Named Argument Single   | Start Volume Cacluator With Arguments | 7                  | 3            | 2          | --type     | ellipsoid  |            |            |
+|                              | ${length}=                            | Get Length         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 7                  | ${length}    |            |            |            |            |            |
+|                              | ${width}=                             | Get Width          |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 3                  | ${width}     |            |            |            |            |            |
+|                              | ${height}=                            | Get Height         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 2                  | ${height}    |            |            |            |            |            |
+|                              | ${type}=                              | Get Type           |              |            |            |            |            |            |
+|                              | Should Be Equal                       | ellipsoid          | ${type}      |            |            |            |            |            |
+|                              | ${digits}=                            | Get Digits         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 4                  | ${digits}    |            |            |            |            |            |
+| Test Named Argument Multiple | Start Volume Cacluator With Arguments | 7                  | 3            | 2          | --type     | ellipsoid  | --digits   | 1          |
+|                              | ${length}=                            | Get Length         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 7                  | ${length}    |            |            |            |            |            |
+|                              | ${width}=                             | Get Width          |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 3                  | ${width}     |            |            |            |            |            |
+|                              | ${height}=                            | Get Height         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 2                  | ${height}    |            |            |            |            |            |
+|                              | ${type}=                              | Get Type           |              |            |            |            |            |            |
+|                              | Should Be Equal                       | ellipsoid          | ${type}      |            |            |            |            |            |
+|                              | ${digits}=                            | Get Digits         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 1                  | ${digits}    |            |            |            |            |            |
+| Test Named Argument Anywhere | Start Volume Cacluator With Arguments | --type             | ellipsoid    | 7          | 3          | --digits   | 1          | 2          |
+|                              | ${length}=                            | Get Length         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 7                  | ${length}    |            |            |            |            |            |
+|                              | ${width}=                             | Get Width          |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 3                  | ${width}     |            |            |            |            |            |
+|                              | ${height}=                            | Get Height         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 2                  | ${height}    |            |            |            |            |            |
+|                              | ${type}=                              | Get Type           |              |            |            |            |            |            |
+|                              | Should Be Equal                       | ellipsoid          | ${type}      |            |            |            |            |            |
+|                              | ${digits}=                            | Get Digits         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 1                  | ${digits}    |            |            |            |            |            |
+| Test Help Flag     | Start Program With Arguments | 7                  | --help      | 3           | 2           |
+|                    | ${output}=                   | Get Program Output |             |             |             |
+|                    | Should Be Equal              | ${expected1}        | ${output}   |             |             |
+| Test Short Form Arguments    | Start Volume Cacluator With Arguments | -t                 | ellipsoid    | 7          | 3          | -d         | 1          | 2          |
+|                              | ${length}=                            | Get Length         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 7                  | ${length}    |            |            |            |            |            |
+|                              | ${width}=                             | Get Width          |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 3                  | ${width}     |            |            |            |            |            |
+|                              | ${height}=                            | Get Height         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 2                  | ${height}    |            |            |            |            |            |
+|                              | ${type}=                              | Get Type           |              |            |            |            |            |            |
+|                              | Should Be Equal                       | ellipsoid          | ${type}      |            |            |            |            |            |
+|                              | ${digits}=                            | Get Digits         |              |            |            |            |            |            |
+|                              | Should Be Equal                       | 1                  | ${digits}    |            |            |            |            |            |

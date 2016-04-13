@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.jsu.mcis.ParserTest" tests="26" skipped="0" failures="0" errors="0" timestamp="2016-04-13T17:44:49" hostname="AH259-790-03" time="0.024">
+  <properties/>
+  <testcase name="testSetOptionalArgumentTest" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testForTooManyArgumentsException" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testIfMultipleValuesAreParsed" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testForTooFewArgumentsException" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testThatHelpExceptionIsThrown" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testThatNewInstanceHasNoArgumentValue" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testIfMultipleArgumentsAreParsed" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testForWrongTypeExceptionWithInt" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testIfRightTypeIsParsed" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="acceptanceTestFive" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testForWrongTypeExceptionWithFloatOptional" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testTooFewArgsExceptionArgs" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testForWrongTypeExceptionWithBoolean" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testForOptionalValueNotFound" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testForOptionalArgumentWrongType" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testIfValueIsParsedCorrectly" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testThatUserArgumentIsAdded" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="acceptanceTestOne" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="acceptanceTestSix" classname="edu.jsu.mcis.ParserTest" time="0.001"/>
+  <testcase name="testTooManyArgsExceptionArgs" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testForOptionalIntValue" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testIfArgumentNameIsParsed" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testForWrongTypeExceptionWithFloat" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testForOptionalFloatValue" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testThatOptionalArgumentDoesNotExistExceptionIsThrown" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <testcase name="testThatArgumentDescriptionIsSet" classname="edu.jsu.mcis.ParserTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

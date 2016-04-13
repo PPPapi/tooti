@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Parser.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">termProject</a> &gt; <a href="index.source.html" class="el_package">edu.jsu.mcis</a> &gt; <span class="el_source">Parser.java</span></div><h1>Parser.java</h1><pre class="source lang-java linenums">package edu.jsu.mcis;
+import java.util.*;
+import java.lang.*;
+import javax.xml.*;
+
+public class Parser{
+	
+	private List&lt;Argument&gt; argumentList;
+	private List&lt;Argument&gt; optionalArgumentsList;
+	private String programName;
+	
+<span class="fc" id="L12">	public Parser(){</span>
+<span class="fc" id="L13">		argumentList = new ArrayList&lt;Argument&gt;();</span>
+<span class="fc" id="L14">		optionalArgumentsList = new ArrayList&lt;Argument&gt;();</span>
+<span class="fc" id="L15">		}</span>
+	
+	public void addArguments(String[] args){
+<span class="fc bfc" id="L18" title="All 2 branches covered.">		for(int i = 0; i &lt; args.length; i++){</span>
+<span class="fc" id="L19">			argumentList.add(new Argument(args[i], Argument.dataType.STRING));</span>
+		}
+<span class="fc" id="L21">	}</span>
+	
+	public void addArgument(String name){
+<span class="fc" id="L24">		argumentList.add(new Argument(name));</span>
+<span class="fc" id="L25">	}</span>
+	
+	public void addArgument(String name, Argument.dataType dataType){
+<span class="fc" id="L28">		argumentList.add(new Argument(name, dataType));</span>
+<span class="fc" id="L29">	}</span>
+	
+	public void addOptionalArgument(String name, String value){
+<span class="fc" id="L32">		optionalArgumentsList.add(new Argument(name));</span>
+<span class="fc" id="L33">		int k = getIndex(name);</span>
+<span class="fc" id="L34">		optionalArgumentsList.get(k).setValue(value);</span>
+<span class="fc" id="L35">	}</span>
+	
+	public void addOptionalArgument(String name, String value, Argument.dataType dataType){
+<span class="fc" id="L38">		optionalArgumentsList.add(new Argument(name));</span>
+<span class="fc" id="L39">		int k = getIndex(name);</span>
+<span class="fc" id="L40">		optionalArgumentsList.get(k).setValue(value);</span>
+<span class="fc" id="L41">		optionalArgumentsList.get(k).setDataType(dataType);</span>
+<span class="fc" id="L42">	}</span>
+	
+	
+	public void addOptionalArgument(String name, String value, Argument.dataType dataType, String shortForm){
+<span class="fc" id="L46">		optionalArgumentsList.add(new Argument(name));</span>
+<span class="fc" id="L47">		int k = getIndex(name);</span>
+<span class="fc" id="L48">		optionalArgumentsList.get(k).setValue(value);</span>
+<span class="fc" id="L49">		optionalArgumentsList.get(k).setDataType(dataType);</span>
+<span class="fc" id="L50">		optionalArgumentsList.get(k).setShortForm(shortForm);</span>
+<span class="fc" id="L51">	}</span>
+	
+	public void addOptionalArgument(String name, String value, Argument.dataType dataType, String shortForm, String description){
+<span class="fc" id="L54">		optionalArgumentsList.add(new Argument(name));</span>
+<span class="fc" id="L55">		int k = getIndex(name);</span>
+<span class="fc" id="L56">		optionalArgumentsList.get(k).setValue(value);</span>
+<span class="fc" id="L57">		optionalArgumentsList.get(k).setDataType(dataType);</span>
+<span class="fc" id="L58">		optionalArgumentsList.get(k).setShortForm(shortForm);</span>
+<span class="fc" id="L59">		optionalArgumentsList.get(k).setDescription(description);</span>
+<span class="fc" id="L60">	}</span>
+	
+	public void setOptionalArgumentType(String name, Argument.dataType dataType){
+<span class="fc" id="L63">		int index = getIndex(name);</span>
+<span class="fc" id="L64">		optionalArgumentsList.get(index).setDataType(dataType);</span>
+		
+<span class="fc" id="L66">	}</span>
+	
+	public boolean containsName(String arg){
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">		for(int i = 0; i &lt; argumentList.size(); i++){</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">			if(argumentList.get(i).getName().equals(arg))</span>
+<span class="fc" id="L71">				return true;</span>
+		}
+<span class="nc" id="L73">		return false;</span>
+	}
+	
+	public void setShortForm(String arg, String shortForm){
+<span class="fc" id="L77">		int index = getIndex(arg);</span>
+<span class="fc" id="L78">		optionalArgumentsList.get(index).setShortForm(shortForm);</span>
+<span class="fc" id="L79">	}</span>
+	
+	public String getShortForm(String arg){
+<span class="fc" id="L82">		int index = getIndex(arg);</span>
+<span class="fc" id="L83">		return optionalArgumentsList.get(index).getShortForm();</span>
+	}
+	
+	public void parseValues(String[] args){
+<span class="fc" id="L87">		int count = 0;</span>
+<span class="fc" id="L88">		List&lt;String&gt; newArgsList = new ArrayList&lt;String&gt;(Arrays.asList(args));</span>
+		
+<span class="fc bfc" id="L90" title="All 2 branches covered.">		for(int i = 0; i &lt; args.length; i++){</span>
+<span class="fc" id="L91">			int k = 0;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">			if((args[i].charAt(0) == '-')){</span>
+<span class="fc" id="L93">				count++;</span>
+<span class="fc" id="L94">				newArgsList.remove(args[i]);</span>
+<span class="fc" id="L95">				String argument = args[i].replace(&quot;-&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L96" title="All 4 branches covered.">				if(args[i].length() &gt; 2 &amp;&amp; args[i].charAt(1) != '-'){</span>
+<span class="fc" id="L97">					String[] charArray = argument.split(&quot;(?!^)&quot;);</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">					for(int j = 0; j &lt; charArray.length; j++){</span>
+<span class="fc" id="L99">						k = getIndex(charArray[j]);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">						if(k &gt; -1){</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">							if(optionalArgumentsList.get(k).getDataType() == Argument.dataType.BOOLEAN){</span>
+<span class="fc" id="L102">								optionalArgumentsList.get(k).setValue(&quot;true&quot;);</span>
+							}
+						}
+					}
+<span class="fc" id="L106">					newArgsList.remove(args[i]);</span>
+<span class="fc" id="L107">			    }</span>
+				else{
+<span class="fc" id="L109">					k = getIndex(argument);</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">					if(k &gt; -1){</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">						if(optionalArgumentsList.get(k).getDataType() == Argument.dataType.BOOLEAN){</span>
+<span class="fc" id="L112">							optionalArgumentsList.get(k).setValue(&quot;true&quot;);</span>
+<span class="fc" id="L113">							break;</span>
+						}
+<span class="fc" id="L115">						optionalArgumentsList.get(k).setValue(args[i+1]);</span>
+<span class="fc" id="L116">						newArgsList.remove(args[i+1]);</span>
+<span class="fc" id="L117">						count++;</span>
+					}
+				}
+			}
+		}
+		
+<span class="fc bfc" id="L123" title="All 2 branches covered.">		for(int i = 0; i &lt; optionalArgumentsList.size(); i++){</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">			if(optionalArgumentsList.get(i).getName().equals(&quot;help&quot;))</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">				if(optionalArgumentsList.get(i).getValue() == &quot;true&quot;)</span>
+<span class="fc" id="L126">					throw new HelpException(programName, optionalArgumentsList.get(i).getDescription());</span>
+		}
+		
+
+		
+<span class="fc bfc" id="L131" title="All 2 branches covered.">		if(args.length &gt; argumentList.size() + count){</span>
+<span class="fc" id="L132">				String extraArgs = &quot;&quot;;</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">				for(int i = argumentList.size(); i &lt; args.length; i++) {</span>
+<span class="fc" id="L134">					extraArgs += args[i];</span>
+				}
+<span class="fc" id="L136">				throw new TooManyArgsException(extraArgs);</span>
+		}
+		
+<span class="fc bfc" id="L139" title="All 2 branches covered.">		else if(args.length &lt; argumentList.size() + count){</span>
+<span class="fc" id="L140">				String extraArgs = &quot;&quot;;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">				for(int i = args.length; i &lt; argumentList.size(); i++){</span>
+<span class="fc" id="L142">					extraArgs += argumentList.get(i).getName() + &quot; &quot;;</span>
+				}
+<span class="fc" id="L144">				throw new TooFewArgsException(extraArgs);</span>
+		}
+		
+<span class="fc bfc" id="L147" title="All 2 branches covered.">		for(int i = 0; i &lt; argumentList.size(); i++){</span>
+<span class="fc" id="L148">			String argList = &quot;&quot;;</span>
+<span class="fc" id="L149">			argumentList.get(i).setValue(newArgsList.get(i));</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">			if(!checkDataType(argumentList.get(i).getName())){</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">				for(int j = 0; j &lt; argumentList.size(); j++){</span>
+<span class="fc" id="L152">					String temp = argumentList.get(j).getName();</span>
+<span class="fc" id="L153">					argList += temp + &quot; &quot;;</span>
+				}
+<span class="fc" id="L155">				throw new WrongTypeException(argumentList.get(i).getValue(), dataTypeToString(argumentList.get(i)), programName, argList, argumentList.get(i).getName());</span>
+			}
+		}
+		
+<span class="fc bfc" id="L159" title="All 2 branches covered.">		for(int i = 0; i &lt; optionalArgumentsList.size(); i++){</span>
+<span class="fc" id="L160">			String argList = &quot;&quot;;</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">			if (!checkDataType(optionalArgumentsList.get(i).getName())){</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">				for(int j = 0; j &lt; optionalArgumentsList.size(); j++){</span>
+<span class="fc" id="L163">					String temp = optionalArgumentsList.get(j).getName();</span>
+<span class="fc" id="L164">					argList += temp + &quot; &quot;;</span>
+				}
+<span class="fc" id="L166">				throw new WrongTypeException(optionalArgumentsList.get(i).getValue(), dataTypeToString(optionalArgumentsList.get(i)), programName, argList, optionalArgumentsList.get(i).getName());</span>
+			}
+			
+		}
+
+<span class="fc" id="L171">	}</span>
+	
+	public String getValue(String arg){
+<span class="fc bfc" id="L174" title="All 2 branches covered.">		for(int i = 0; i &lt; argumentList.size(); i++){</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">			if(argumentList.get(i).getName().equals(arg))</span>
+<span class="fc" id="L176">				return argumentList.get(i).getValue();</span>
+		}
+		
+<span class="fc" id="L179">		throw new NoValueFoundException(arg);</span>
+	}
+	
+	public String getOptionalValue(String arg){
+<span class="fc bfc" id="L183" title="All 2 branches covered.">		for(int i = 0; i &lt; optionalArgumentsList.size(); i++){</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">			if(optionalArgumentsList.get(i).getName().equals(arg))</span>
+<span class="fc" id="L185">				return optionalArgumentsList.get(i).getValue();</span>
+		}
+		
+<span class="fc" id="L188">		throw new NoValueFoundException(arg);</span>
+	}
+	
+	private int getIndex(String arg){
+<span class="fc bfc" id="L192" title="All 2 branches covered.">		for(int i = 0; i &lt; optionalArgumentsList.size(); i++){</span>
+<span class="fc bfc" id="L193" title="All 4 branches covered.">			if((optionalArgumentsList.get(i).getName().equals(arg)) || (optionalArgumentsList.get(i).getShortForm().equals(arg)))</span>
+<span class="fc" id="L194">				return i;</span>
+		}
+		
+<span class="fc" id="L197">		throw new OptionalArgumentDoesNotExistException(arg, programName);</span>
+		
+	}
+	
+	private boolean checkDataType(String arg){
+<span class="fc" id="L202">		int k = 0;</span>
+		try{
+<span class="fc" id="L204">			k = getIndex(arg);</span>
+<span class="fc" id="L205">			Argument.dataType argType = optionalArgumentsList.get(k).getDataType();</span>
+				int tempInt;
+				float tempFloat;
+<span class="fc bfc" id="L208" title="All 2 branches covered.">				if(argType.equals(Argument.dataType.BOOLEAN)){</span>
+<span class="pc bpc" id="L209" title="3 of 4 branches missed.">					if(optionalArgumentsList.get(k).getValue().equals(&quot;true&quot;) || optionalArgumentsList.get(k).getValue().equals(&quot;false&quot;))</span>
+<span class="fc" id="L210">						return true;</span>
+					else 
+<span class="nc" id="L212">						return false;</span>
+				}
+					
+<span class="fc bfc" id="L215" title="All 2 branches covered.">				else if(argType.equals(Argument.dataType.INT)){</span>
+					try{
+<span class="fc" id="L217">						tempInt = Integer.parseInt(optionalArgumentsList.get(k).getValue());</span>
+<span class="fc" id="L218">					} catch(NumberFormatException ex){</span>
+<span class="fc" id="L219">						return false;</span>
+<span class="fc" id="L220">					}</span>
+<span class="fc" id="L221">					return true;</span>
+				}
+				
+<span class="fc bfc" id="L224" title="All 2 branches covered.">				else if(argType.equals(Argument.dataType.FLOAT)){</span>
+					try{
+<span class="fc" id="L226">						tempFloat = Float.parseFloat(optionalArgumentsList.get(k).getValue());</span>
+<span class="fc" id="L227">					} catch(NumberFormatException ex){</span>
+<span class="fc" id="L228">						return false;</span>
+<span class="fc" id="L229">					}</span>
+<span class="fc" id="L230">					return true;</span>
+				}
+					
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">				else if(argType.equals(Argument.dataType.STRING)){</span>
+<span class="fc" id="L234">					return true;</span>
+				}
+					
+				else 
+<span class="nc" id="L238">					return false;</span>
+					
+<span class="fc" id="L240">		}catch(OptionalArgumentDoesNotExistException OpArgException){</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">			for(int i = 0; i &lt; argumentList.size(); i++){</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">				if(argumentList.get(i).getName().equals(arg)){</span>
+<span class="fc" id="L243">					Argument.dataType argType = argumentList.get(i).getDataType();</span>
+					int tempInt;
+					float tempFloat;
+<span class="fc bfc" id="L246" title="All 2 branches covered.">					if(argType.equals(Argument.dataType.BOOLEAN)){</span>
+<span class="pc bpc" id="L247" title="1 of 4 branches missed.">						if(argumentList.get(i).getValue().equals(&quot;true&quot;) || argumentList.get(i).getValue().equals(&quot;false&quot;))</span>
+<span class="fc" id="L248">							return true;</span>
+						else 
+<span class="fc" id="L250">							return false;</span>
+					}
+					
+<span class="fc bfc" id="L253" title="All 2 branches covered.">					else if(argType.equals(Argument.dataType.INT)){</span>
+						try{
+<span class="fc" id="L255">							tempInt = Integer.parseInt(argumentList.get(i).getValue());</span>
+<span class="fc" id="L256">						} catch(NumberFormatException ex){</span>
+<span class="fc" id="L257">							return false;</span>
+<span class="fc" id="L258">						}</span>
+<span class="fc" id="L259">						return true;</span>
+					}
+					
+<span class="fc bfc" id="L262" title="All 2 branches covered.">					else if(argType.equals(Argument.dataType.FLOAT)){</span>
+						try{
+<span class="fc" id="L264">							tempFloat = Float.parseFloat(argumentList.get(i).getValue());</span>
+<span class="fc" id="L265">						} catch(NumberFormatException ex){</span>
+<span class="fc" id="L266">							return false;</span>
+<span class="fc" id="L267">						}</span>
+<span class="fc" id="L268">						return true;</span>
+					}
+					
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">					else if(argType.equals(Argument.dataType.STRING)){</span>
+<span class="fc" id="L272">						return true;</span>
+					}
+					
+					else 
+<span class="nc" id="L276">						return false;</span>
+					
+				}
+			}
+		}
+<span class="nc" id="L281">		return false;</span>
+	}
+	
+	public void setArgumentDescription(String arg, String description){
+<span class="fc" id="L285">		int index = getIndex(arg);</span>
+<span class="fc" id="L286">		optionalArgumentsList.get(index).setDescription(description);</span>
+<span class="fc" id="L287">	}</span>
+	
+	public String getArgumentDescription(String arg){
+<span class="fc" id="L290">		int index = getIndex(arg);</span>
+<span class="fc" id="L291">		return optionalArgumentsList.get(index).getDescription();</span>
+	}
+	
+	public void setProgramName(String name){
+<span class="fc" id="L295">		this.programName = name;</span>
+<span class="fc" id="L296">	}</span>
+	
+	public String dataTypeToString(Argument arg){
+<span class="fc" id="L299">		Argument.dataType type = arg.getDataType();</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">		if(type == (Argument.dataType.BOOLEAN))</span>
+<span class="fc" id="L301">			return &quot;Boolean&quot;;</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">		else if(type == (Argument.dataType.INT))</span>
+<span class="fc" id="L303">			return &quot;int&quot;;</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">		else if(type == (Argument.dataType.FLOAT))</span>
+<span class="fc" id="L305">			return &quot;float&quot;;</span>
+		else
+<span class="nc" id="L307">			return &quot;String&quot;;</span>
+	}
+	
+	public Argument.dataType getDataType(String arg){
+<span class="fc" id="L311">		int index = getIndex(arg);</span>
+<span class="fc" id="L312">		return optionalArgumentsList.get(index).getDataType();</span>
+	}
+	
+}
+	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

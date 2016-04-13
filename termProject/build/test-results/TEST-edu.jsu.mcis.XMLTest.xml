@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="edu.jsu.mcis.XMLTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2016-04-13T17:44:49" hostname="AH259-790-03" time="0.046">
+  <properties/>
+  <testcase name="testWithFileNotFound" classname="edu.jsu.mcis.XMLTest" time="0.004"/>
+  <testcase name="testThatFileLoads" classname="edu.jsu.mcis.XMLTest" time="0.039"/>
+  <testcase name="testFileNoXMLExtension" classname="edu.jsu.mcis.XMLTest" time="0.0"/>
+  <testcase name="testThatFileIsStoredInParser" classname="edu.jsu.mcis.XMLTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
